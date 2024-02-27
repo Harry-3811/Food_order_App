@@ -1,10 +1,29 @@
 import RestaurantCard from "./RestaurantCard";
 import resList from "../utils/mockData";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Body = () => {
-  const [listofRestaurants, setlistofRestaurants] = useState(resList);
-  console.log(listofRestaurants);
+  const [listofRestaurants, setlistofRestaurants] = useState([]);
+  // console.log(listofRestaurants);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const data = await fetch(
+      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9351929&lng=77.62448069999999&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
+    );
+
+    const json = await data.json();
+    console.log(
+      json.data.cards[4].card.card.gridElements.infoWithStyle.restaurants
+    );
+
+    setlistofRestaurants(
+      json.data.cards[4].card.card.gridElements.infoWithStyle.restaurants
+    );
+  };
 
   //   let listofRestaurantsJS = [
   //     {
@@ -90,7 +109,6 @@ const Body = () => {
             const filteredList = listofRestaurants.filter(
               (res) => res.info.avgRating > 4.5
             );
-            console.log(filteredList);
             setlistofRestaurants(filteredList);
           }}
           //   onMouseOver={() => {
