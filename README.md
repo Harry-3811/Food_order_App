@@ -35,3 +35,8 @@ Named Export / Import:
 React Hooks-Normal js utility function
 -useState()
 -useEffect()
+
+# 2 Types of Routing in web apps
+
+1.Client Side Routing
+2.Server Side Routing
