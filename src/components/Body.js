@@ -1,4 +1,5 @@
-import RestaurantCard from "./RestaurantCard";
+import useonlineStatus from "../utils/useOnlineStatus";
+import RestaurantCard, { withOpenLabel } from "./RestaurantCard";
 import Shimmer from "./shimmer";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -7,6 +8,10 @@ const Body = () => {
   const [listofRestaurants, setlistofRestaurants] = useState([]);
   const [searchText, setsearchText] = useState("");
   const [filteredRestaurant, setFilteredRestaurant] = useState([]);
+
+  const RestaurantCardOpen = withOpenLabel(RestaurantCard);
+
+  console.log(listofRestaurants);
 
   useEffect(() => {
     fetchData();
@@ -28,21 +33,31 @@ const Body = () => {
     );
   };
 
+  const onlineStatus = useonlineStatus();
+
+  if (onlineStatus === false)
+    return (
+      <h1>
+        Looks like you are offline!! Please Check your Internet Connection
+      </h1>
+    );
+
   return listofRestaurants.length === 0 ? (
     <Shimmer />
   ) : (
     <div className="body">
-      <div className="filter">
-        <div className="search">
+      <div className="filter flex">
+        <div className="search m-4 p-4">
           <input
             type="text"
-            className="search-box"
+            className="border border-solid border-black"
             value={searchText}
             onChange={(e) => {
               setsearchText(e.target.value);
             }}
           />
           <button
+            className="px-4 py-2 m-4 bg-green-100 rounded-lg"
             onClick={() => {
               const filteredRestaurant = listofRestaurants.filter((res) =>
                 res.info.name.toLowerCase().includes(searchText.toLowerCase())
@@ -54,28 +69,34 @@ const Body = () => {
             Search
           </button>
         </div>
-        <button
-          className="fillter-btn"
-          onClick={() => {
-            const filteredList = listofRestaurants.filter(
-              (res) => res.info.avgRating > 4.5
-            );
-            setlistofRestaurants(filteredList);
-          }}
-          //   onMouseOver={() => {
-          //     console.log("Button Clicked");
-          //   }}
-        >
-          Top Rated Restaurants
-        </button>
+        <div className="m-4 p-4 flex items-center ">
+          <button
+            className="px-4 py-2 bg-gray-100 rounded-lg"
+            onClick={() => {
+              const filteredList = listofRestaurants.filter(
+                (res) => res.info.avgRating > 4.5
+              );
+              setlistofRestaurants(filteredList);
+            }}
+            //   onMouseOver={() => {
+            //     console.log("Button Clicked");
+            //   }}
+          >
+            Top Rated Restaurants
+          </button>
+        </div>
       </div>
-      <div className="res-container">
+      <div className="flex flex-wrap">
         {filteredRestaurant.map((restaurant) => (
           <Link
             key={restaurant.info.id}
             to={"/restaurants/" + restaurant.info.id}
           >
-            <RestaurantCard resData={restaurant} />
+            {restaurant.info.isOpen ? (
+              <RestaurantCardOpen resData={restaurant} />
+            ) : (
+              <RestaurantCard resData={restaurant} />
+            )}
           </Link>
         ))}
       </div>
