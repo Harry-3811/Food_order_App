@@ -1,7 +1,10 @@
+import { useContext } from "react";
+import UserContext from "../utils/UserContext";
 import { CDN_URL } from "../utils/constants";
 
 const RestaurantCard = (props) => {
   const { resData } = props;
+  const { loggedInUser } = useContext(UserContext);
   const { name, cuisines, avgRating, costForTwo, sla, cloudinaryImageId } =
     resData?.info;
   return (
@@ -16,13 +19,16 @@ const RestaurantCard = (props) => {
       <h4>{avgRating}</h4>
       <h4>{costForTwo}</h4>
       <h4>{sla.deliveryTime} minutes</h4>
+      <h4>User: {loggedInUser}</h4>
     </div>
   );
 };
 
 // Higher order component
 
-// input - Restaurant Card ==> RestaurantCardOpen
+// input - RestaurantCard ==> RestaurantCardOpenLabel
+
+// withOpenLabel is a HOC which takes RestauarantCard as a component and enhances it.
 
 export const withOpenLabel = (RestaurantCard) => {
   return (props) => {
