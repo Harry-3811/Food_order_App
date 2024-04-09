@@ -33,10 +33,20 @@ Named Export / Import:
     import Component from "path";
 
 React Hooks-Normal js utility function
--useState()
--useEffect()
+
+- useState()
+- useEffect()
 
 # 2 Types of Routing in web apps
 
 1.Client Side Routing
 2.Server Side Routing
+
+# Redux Toolkit
+
+- Install @reduxjs/toolkit and react-redux libraries.
+- Build our store
+- Connect our store to our app
+- Slice (cartSlice)
+- dispatch(action)
+- Selector
